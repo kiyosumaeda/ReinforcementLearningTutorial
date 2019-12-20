@@ -1,8 +1,8 @@
 import gym
 import numpy as np
 
-GAMMA = 0.90
-ETA = 0.01
+GAMMA = 0.99
+ETA = 0.1
 
 class Brain:
 	def __init__(self, num_states, num_actions):
@@ -23,7 +23,7 @@ class Brain:
 	def decide_action(self, observation, episode):
 		state = observation
 		epsilon = 0.5*(1/(episode+1))
-		# epsilon = 0.001
+		# epsilon = 0.1
 
 		if epsilon <= np.random.uniform(0, 1):
 			action = np.argmax(self.q_table[state][:])

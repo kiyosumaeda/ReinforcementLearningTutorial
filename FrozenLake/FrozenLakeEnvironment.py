@@ -56,13 +56,9 @@ class Environment:
 				if step == MAX_STEPS-1:
 					self.all_episode_list.append(0)
 
-			# if self.complete_episodes >= 10:
-			# 	print('10回連続成功')
-			# 	frames = []
-			# 	episode_final = True
 		print('success episodes: ', complete_episodes)
 
 	def show_episode_list(self):
-		with open("episode3.txt", "wt") as f:
+		with open("episode1.txt", "wt") as f:
 			for episode in self.all_episode_list:
 				f.write(str(episode)+'\n')
