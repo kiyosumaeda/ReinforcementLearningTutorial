@@ -1,19 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-v = np.zeros(101)
-policy = np.zeros(100)
+v = np.zeros(101, dtype=np.longdouble)
+policy = np.zeros(100, dtype=np.longdouble)
 p = 0.4
 # gamma = 0.9
 gamma = 1.0
 
-threshold = 0.000001
+threshold = 1e-9
 sweep = []
 
 delta = 1
 iteration = 0
-# while delta >= threshold:
-while iteration <= 32:
+while delta >= threshold:
+# while iteration <= 32:
 	delta = 0
 	for s in range(1, 100):
 		v_s = v[s]
@@ -39,11 +39,10 @@ print(len(sweep))
 x = np.linspace(1, 99, 99)
 # fig = plt.figure(figsize=(12, 6))
 # ax = fig.add_subplot(111)
-# ax.plot(x, sweep[0][1:100])
-# ax.plot(x, sweep[1][1:100])
+# ax.plot(x, sweep[len(sweep)-1][1:100])
 
 for s in range(1, 100):
-	dp = np.zeros(min(s, 100-s)+1)
+	dp = np.zeros(min(s, 100-s)+1, dtype=np.longdouble)
 	for a in range(1, min(s, 100-s)+1):
 		head_capital = s+a
 		tail_capital = s-a
