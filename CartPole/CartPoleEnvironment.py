@@ -2,6 +2,7 @@ import gym
 
 from CartPoleAgent import Agent
 
+
 ENV = 'CartPole-v0'
 MAX_STEPS = 200
 NUM_EPISODES = 1000
@@ -9,9 +10,9 @@ NUM_EPISODES = 1000
 class Environment:
 	def __init__(self):
 		self.env = gym.make(ENV)
-		self.num_states = self.env.observation_space.shape[0]
-		self.num_actions = self.env.action_space.n
-		self.agent = Agent(self.num_states, self.num_actions)
+		num_states = self.env.observation_space.shape[0]
+		num_actions = self.env.action_space.n
+		self.agent = Agent(num_states, num_actions)
 
 	def run(self):
 		complete_episodes = 0
@@ -38,7 +39,7 @@ class Environment:
 
 				episode_reward += reward
 
-				self.agent.update_q_functions(
+				self.agent.update(
 					observation, action, reward, observation_next
 				)
 
