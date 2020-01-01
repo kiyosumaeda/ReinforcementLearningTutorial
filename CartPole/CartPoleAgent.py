@@ -2,15 +2,14 @@ import gym
 import numpy as np
 
 
-GAMMA = 0.99
-ETA = 0.5
+GAMMA = 0.0
+alpha = 0.1
 digitized_num = 6
 
 class Agent:
 	def __init__(self, states_num, actions_num):
 		self.actions_num = actions_num
-		self.q = np.random.uniform(low=0, high=1, size=(digitized_num**states_num, actions_num))
-		# self.brain = Brain(states_num, actions_num)
+		self.q = np.zeros((digitized_num**states_num, actions_num))
 
 	def digitize_state(self, observation):
 		cart_pos, cart_v, pole_angle, pole_v = observation
@@ -27,12 +26,11 @@ class Agent:
 		state = self.digitize_state(observation)
 		next_state = self.digitize_state(next_observation)
 		next_q = max(self.q[next_state][:])
-		self.q[state, action] += ETA*(reward+GAMMA*next_q - self.q[state, action])
+		self.q[state, action] += alpha*(reward+GAMMA*next_q - self.q[state, action])
 
 	def take_action(self, observation, episode):
 		state = self.digitize_state(observation)
 		epsilon = 0.5*(1/(episode+1))
-		# print("epsilon: ", epsilon)
 		if epsilon <= np.random.uniform(0, 1):
 			action = np.argmax(self.q[state][:])
 		else:

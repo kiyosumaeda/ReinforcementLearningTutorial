@@ -5,7 +5,9 @@ from CartPoleAgent import Agent
 
 ENV = 'CartPole-v0'
 STEPS = 200
-EPISODES = 1000
+EPISODES = 2000
+
+episode_list = []
 
 env = gym.make(ENV)
 states_num = env.observation_space.shape[0]
@@ -20,18 +22,19 @@ for i in range(EPISODES):
 		next_observation, r, done, info = env.step(action)
 
 		if done:
-			if j < 200:
-				reward = -1
-			else:
-				reward = 1
+			reward = -1 if j < 195 else 1
 		else:
 			reward = 0
 
-		# episode_reward += reward
 		agent.update(observation, action, reward, next_observation)
 
 		observation = next_observation
 
 		if done:
 			print(i, " episode finished, ", j+1, " time step")
+			episode_list.append(j+1)
 			break
+
+with open("step3.txt", "wt") as f:
+	for episode in episode_list:
+		f.write(str(episode)+'\n')
