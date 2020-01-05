@@ -84,13 +84,15 @@ X = np.arange(11, 21, 1)
 Y = np.arange(0, 10, 1)
 mesh_X, mesh_Y = np.meshgrid(X, Y)
 print(mesh_X)
-Z_0 = v[0][mesh_Y][mesh_X]
-Z_1 = v[1][mesh_Y][mesh_X]
+print(mesh_Y)
+Z_0 = v[0][:, 11:21]
+Z_1 = v[1][:, 11:21]
+print(Z_0)
 
 fig = plt.figure()
 ax = Axes3D(fig)
-ax = set_xlabel("player sum")
+ax.set_xlabel("player sum")
 ax.set_ylabel("dealer showing")
 
-ax.plot_wireframe(mesh_X, mesh_Y, Z_0)
+ax.plot_wireframe(X, Y, Z_0)
 plt.show()
