@@ -15,6 +15,9 @@ LEARNING_RATE = 0.00025
 MOMENTUM = 0.95
 MIN_GRAD = 0.01
 
+ACTION_INTERVAL = 4
+INITIAL_REPLAY_SIZE = 20000
+
 class Agent():
 	def __init__(self, num_actions):
 		self.num_actions = num_actions
@@ -57,3 +60,38 @@ class Agent():
 
 	def build_training_op(self, q_network_weights):
 		a = tf.placeholder(tf.int64, [None])
+		y = tf.placeholder(tf.float32, [None])
+
+		a_one_hot = tf.one_hot(a, self.num_actions, 1.0, 0.0)
+		q_value = tf.reduce_sum(tf.mul(self.q_value, a_one_hot), reduction_indices=1)
+
+		error = tf.abs(y - q_value)
+		quadratic_part = tf.clip_by_value(error, 0.0, 1.0)
+		linear_part = error - quadratic_part
+		loss = tf.reduce_mean(0.5 * tf.square(quadratic_part) + linear_part)
+
+		optimizer = tf.train.RMSPropOptimizer(LEARNING_RATE, momentum=MOMENTUM, epsilon=MIN_GRAD)
+		grad_update = optimizer.minimize(loss, var_list=q_network_weights)
+
+		return a, y, loss, grad_update
+
+	def get_initial_state(self, observation, last_observation):
+		processed_observation = np.maximum(observation, last_observation)
+		processed_observation = np.uint8(resize(rgb2gray(processed_observation), (FRAME_WIDTH, FRAME_HEIGHT))*255)
+		state = [processed_observation for i in range(STATE_LENGTH)]
+		return np.stack(state, axis=0)
+
+	def get_action(self, state):
+		action = self.repeated_action
+
+		if self.t % ACTION_INTERVAL == 0:
+			if self.epsilon >= random.random() or self.t < INITIAL_REPLAY_SIZE:
+				action = random.randomrange(self.num_actions)
+			else:
+				action = np.argmax(self.q_value.eval(feed_dict={self.x: [np.float32(state / 255.0)]}))
+			self.repeated_action = action
+
+		if self.epsilon > epsilon2 and self.t >= INITIAL_REPLAY_SIZE:
+			self.epsilon -= self.epsilon_step
+
+		return action
