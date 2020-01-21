@@ -77,17 +77,18 @@ for i in range(episodes):
 				returns[0][opened_card-1][sum(st)-1].append(g)
 				v[0][opened_card-1][sum(st)-1] = sum(returns[0][opened_card-1][sum(st)-1])/(len(returns[0][opened_card-1][sum(st)-1])-1)
 
-print(returns)
-print(v)
+# print(returns)
+# print(v)
 
 X = np.arange(11, 21, 1)
 Y = np.arange(0, 10, 1)
 mesh_X, mesh_Y = np.meshgrid(X, Y)
-print(mesh_X)
-print(mesh_Y)
+# print(mesh_X)
+# print(mesh_Y)
 Z_0 = v[0][:, 11:21]
 Z_1 = v[1][:, 11:21]
 print(Z_0)
+print(Z_1)
 
 fig = plt.figure()
 ax = Axes3D(fig)

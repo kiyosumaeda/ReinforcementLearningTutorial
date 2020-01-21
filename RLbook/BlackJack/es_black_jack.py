@@ -11,7 +11,7 @@ returns = [[[[[0 for i in range(1)] for j in range(21)] for k in range(10)] for 
 cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 # print(policy)
 
-episodes = 20
+episodes = 1
 gamma = 1
 for i in range(episodes):
 	print("episode: ", i)
